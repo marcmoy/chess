@@ -44,12 +44,12 @@ module Cursorable
     when :tab
       board.debug_board
     when :return, :space
-      @cursor_pos
       if @selected_pos
         @selected_pos = nil
       else
-        @selected_pos = @cursor_pos
+        @selected_pos = @cursor_pos.dup
       end
+      @cursor_pos
     when :left, :right, :up, :down
       update_pos(MOVES[key])
       nil
