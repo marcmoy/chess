@@ -32,6 +32,10 @@ class Piece
     color == :white ? :black : :white
   end
 
+  def promote
+    board[pos] = Queen.new(board, color, pos)
+  end
+
   private
 
   def move_into_check?(to_pos)
@@ -196,12 +200,17 @@ end
 
 
 class Pawn < Piece
+
+  def debug_pawn
+    debugger
+  end
+
   def symbol
     "♙"
   end
 
   def moves
-    forward_steps + side_attacks
+    forward_steps + side_attacks + en_passant_move
   end
 
   protected
@@ -220,7 +229,6 @@ class Pawn < Piece
     return [] unless board.in_bounds?(one_fwd) && board[one_fwd].empty?
     return [one_fwd] unless at_start_row? && board[two_fwd].empty?
     [one_fwd, two_fwd]
-
   end
 
   def side_attacks
@@ -230,4 +238,9 @@ class Pawn < Piece
       board.in_bounds?(pos) && board[pos].color == enemy_color
     end
   end
+
+  def en_passant_move
+
+  end
+
 end

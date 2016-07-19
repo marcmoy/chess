@@ -7,7 +7,8 @@ class Board
 
   def self.setup
     options = {castle_kingside: [:black, :white],
-              castle_queenside: [:black, :white]}
+              castle_queenside: [:black, :white],
+              en_passant_pawns: NullPiece.instance}
     board = Board.new(options)
     [:black, :white].each_with_index do |color, i|
       piece_rank = 7 * i
@@ -29,7 +30,9 @@ class Board
 
   def initialize(options = nil)
     @grid = Array.new(8){ Array.new(8) { NullPiece.instance } }
-    @options = options || {castle_kingside: [], castle_queenside: []}
+    @options = options || {castle_kingside: [],
+                          castle_queenside: [],
+                          en_passant_pawns: NullPiece.instance}
   end
 
   def [](pos)
@@ -60,6 +63,10 @@ class Board
     if castle_move?(moved_piece, start, end_pos)
       move_rook_for_castle!(start, end_pos)
     end
+
+    handle_en_passant(moved_piece, start, end_pos)
+
+    moved_piece.promote if moved_piece.is_a?(Pawn) && [0,7].include?(end_pos[0])
     remove_castling_privilege(start, moved_piece.color)
     self
   end
@@ -106,12 +113,17 @@ class Board
   private
   attr_reader :grid
 
+  def handle_en_passant(moved_piece, start, end_pos)
+    return false unless moved_piece.is_a?(Pawn)
+    options[:en_passant_pawns]
+  end
+
   def dup_options
     duped = {}
     options.each { |k, v| duped[k] = v.dup }
     duped
   end
-  
+
   def castle_move?(piece, start, end_pos)
     piece.is_a?(King) && (start[1] - end_pos[1]).abs == 2
   end
