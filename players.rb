@@ -26,7 +26,7 @@ class HumanPlayer
   end
 end
 
-class ComputerPlayer
+class Level1ComputerPlayer
 
   attr_reader :name, :display
   attr_accessor :color, :board
@@ -64,7 +64,7 @@ class ComputerPlayer
   end
 end
 
-class SlightlySmarterComputerPlayer < ComputerPlayer
+class Level2ComputerPlayer < Level1ComputerPlayer
 
   def play_turn
     display.render
@@ -81,6 +81,33 @@ class SlightlySmarterComputerPlayer < ComputerPlayer
       end
     end
     nil
+  end
+
+end
+
+class Level3ComputerPlayer < Level2ComputerPlayer
+
+  PIECE_RANK = {
+    Pawn => 1,
+    Knight => 3,
+    Bishop => 3,
+    Rook => 5,
+    Queen => 9
+  }
+
+  def capture_move
+    current_rank = 0
+    move_result = nil
+    pcs = pieces_with_valid_moves
+    pcs.each do |piece|
+      piece.valid_moves.each do |move|
+        if board[move].color == enemy_color && PIECE_RANK[board[move].class] > current_rank
+          move_result = [piece.pos, move]
+          current_rank = PIECE_RANK[board[move].class]
+        end
+      end
+    end
+    move_result
   end
 
 end
