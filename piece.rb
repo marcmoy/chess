@@ -103,7 +103,8 @@ class King < Piece
     castle_squares.all? do |sq|
       board[sq].empty? &&
         board.pieces(enemy_color).none? do |piece|
-          piece.moves.include?(sq)
+          enemy_moves = piece.is_a?(King) ? piece.step_moves : piece.moves
+          enemy_moves.include?(sq)
         end
     end
 
@@ -121,7 +122,8 @@ class King < Piece
     castle_squares.drop(1).all? do |sq|
       board[sq].empty? &&
         board.pieces(enemy_color).none? do |piece|
-          piece.moves.include?(sq)
+          enemy_moves = piece.is_a?(King) ? piece.step_moves : piece.moves
+          enemy_moves.include?(sq)
         end
     end
   end

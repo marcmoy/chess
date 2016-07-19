@@ -119,6 +119,8 @@ class Board
 
   def handle_en_passant(moved_piece, start, end_pos)
     ep_pos = board_data[:en_passant_pawn]
+    board_data[:en_passant_pawn] = []
+    return nil unless moved_piece.is_a?(Pawn)
     square_moved_through = nil
 
     unless ep_pos.empty?
@@ -126,8 +128,6 @@ class Board
       square_moved_through = [ep_pos[0] - fwd_dir, ep_pos[1]]
     end
 
-    board_data[:en_passant_pawn] = []
-    return false unless moved_piece.is_a?(Pawn)
     board_data[:en_passant_pawn] = moved_piece.pos if (start[0] - end_pos[0]).abs == 2
 
     if square_moved_through && end_pos == square_moved_through
