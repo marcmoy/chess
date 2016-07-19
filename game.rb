@@ -23,6 +23,7 @@ class ChessGame
         board.move(current_player.color, *move)
       rescue InvalidMoveError
         puts "Invalid move."
+        sleep(1)
         retry
       end
 

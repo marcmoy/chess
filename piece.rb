@@ -24,9 +24,6 @@ class Piece
     false
   end
 
-  def symbol
-  end
-
   def valid_moves
     moves.reject{|move| move_into_check?(move)}
   end
@@ -75,12 +72,64 @@ class King < Piece
     "♔"
   end
 
+  def moves
+    step_moves + castle_moves
+  end
+
+  def castle_moves
+    king_side_castle_pos = (color == :white ? [7,6] : [0,6])
+    queen_side_castle_pos = (color == :white ? [7,2] : [0,2])
+    moves = []
+    moves << king_side_castle_pos if can_castle_king_side?
+    moves << queen_side_castle_pos if can_castle_queen_side?
+    moves
+  end
+
+  def can_castle_king_side?
+
+    return false unless board.options[:castle_kingside].include?(color)
+    return false if board.in_check?(color)
+
+    castle_squares = []
+    castle_squares << [7,5] << [7,6] if color == :white
+    castle_squares << [0,5] << [0,6] if color == :black
+
+    # check if squares between king and rook are safe to castle through
+    castle_squares.all? do |sq|
+      board[sq].empty? &&
+        board.pieces(enemy_color).none? do |piece|
+          piece.moves.include?(sq)
+        end
+    end
+
+
+  end
+
+  def can_castle_queen_side?
+    return false unless board.options[:castle_queenside].include?(color)
+    return false if board.in_check?(color)
+    castle_squares = []
+    castle_squares << [7,1] << [7,2] << [7,3] if color == :white
+    castle_squares << [0,1] << [0,2] << [0,3] if color == :black
+
+    return false unless board[castle_squares.first].empty?
+    castle_squares.drop(1).all? do |sq|
+      board[sq].empty? &&
+        board.pieces(enemy_color).none? do |piece|
+          piece.moves.include?(sq)
+        end
+    end
+  end
+
   protected
   def move_diffs
     [[-1, -1], [-1, 0], [-1, 1],
      [0, -1],           [0, 1],
      [1, -1],  [1, 0],  [1, 1]]
   end
+
+
+
 end
 
 class Knight < Piece
@@ -90,10 +139,15 @@ class Knight < Piece
    "♘"
   end
 
+  def moves
+    step_moves
+  end
+
   protected
   def move_diffs
     [[-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]]
   end
+
 end
 
 class Bishop < Piece
@@ -111,6 +165,11 @@ end
 
 class Rook < Piece
   include Slidable
+
+  # def initialize
+  #   @moved_already = false
+  #   super
+  # end
 
   def symbol
     "♖"

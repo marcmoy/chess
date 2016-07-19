@@ -35,18 +35,3 @@ class Display
   end
 
 end
-
-
-if __FILE__ == $PROGRAM_NAME
-  b = Board.new
-
-  d = Display.new(b)
-  d.render
-
-  p "bk checked?: #{b.in_check?(:black)} "
-  p "wk checked?: #{b.in_check?(:white)} "
-  # while true
-
-  #   d.get_input
-  # end
-end
