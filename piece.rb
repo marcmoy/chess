@@ -67,6 +67,7 @@ class NullPiece
   def empty?
     true
   end
+
 end
 
 class King < Piece
@@ -91,7 +92,7 @@ class King < Piece
 
   def can_castle_king_side?
 
-    return false unless board.options[:castle_kingside].include?(color)
+    return false unless board.board_data[:castle_kingside].include?(color)
     return false if board.in_check?(color)
 
     castle_squares = []
@@ -110,7 +111,7 @@ class King < Piece
   end
 
   def can_castle_queen_side?
-    return false unless board.options[:castle_queenside].include?(color)
+    return false unless board.board_data[:castle_queenside].include?(color)
     return false if board.in_check?(color)
     castle_squares = []
     castle_squares << [7,1] << [7,2] << [7,3] if color == :white
@@ -210,16 +211,26 @@ class Pawn < Piece
   end
 
   def moves
-    forward_steps + side_attacks + en_passant_move
+    move_list = forward_steps + side_attacks
+    epm = en_passant_move
+    move_list << epm if epm
+    move_list
+  end
+
+  def en_passant_move
+    return nil if board.board_data[:en_passant_pawn].empty?
+    rank, file = board.board_data[:en_passant_pawn]
+    return nil unless (pos[0] == rank) && (pos[1] - file).abs == 1
+    [rank + forward_dir, file]
+  end
+
+  def forward_dir
+    color == :white ? -1 : 1
   end
 
   protected
   def at_start_row?
     forward_dir > 0 ? pos[0] == 1 : pos[0] == 6
-  end
-
-  def forward_dir
-    color == :white ? -1 : 1
   end
 
   def forward_steps
@@ -237,10 +248,6 @@ class Pawn < Piece
     result.select do |pos|
       board.in_bounds?(pos) && board[pos].color == enemy_color
     end
-  end
-
-  def en_passant_move
-
   end
 
 end

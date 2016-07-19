@@ -6,10 +6,10 @@ end
 class Board
 
   def self.setup
-    options = {castle_kingside: [:black, :white],
+    board_data = {castle_kingside: [:black, :white],
               castle_queenside: [:black, :white],
-              en_passant_pawns: NullPiece.instance}
-    board = Board.new(options)
+              en_passant_pawn: []}
+    board = Board.new(board_data)
     [:black, :white].each_with_index do |color, i|
       piece_rank = 7 * i
       pawn_rank = 5 * i + 1
@@ -26,13 +26,13 @@ class Board
     board
   end
 
-  attr_reader :options
+  attr_reader :board_data
 
-  def initialize(options = nil)
+  def initialize(board_data = nil)
     @grid = Array.new(8){ Array.new(8) { NullPiece.instance } }
-    @options = options || {castle_kingside: [],
+    @board_data = board_data || {castle_kingside: [],
                           castle_queenside: [],
-                          en_passant_pawns: NullPiece.instance}
+                          en_passant_pawn: []}
   end
 
   def [](pos)
@@ -60,14 +60,8 @@ class Board
     moved_piece.pos = end_pos
     self[start] = NullPiece.instance
 
-    if castle_move?(moved_piece, start, end_pos)
-      move_rook_for_castle!(start, end_pos)
-    end
+    handle_special_moves(moved_piece, start, end_pos)
 
-    handle_en_passant(moved_piece, start, end_pos)
-
-    moved_piece.promote if moved_piece.is_a?(Pawn) && [0,7].include?(end_pos[0])
-    remove_castling_privilege(start, moved_piece.color)
     self
   end
 
@@ -113,14 +107,45 @@ class Board
   private
   attr_reader :grid
 
+  def handle_special_moves(moved_piece, start, end_pos)
+    handle_castling(moved_piece, start, end_pos)
+    handle_en_passant(moved_piece, start, end_pos)
+    handle_promotion(moved_piece, end_pos)
+  end
+
+  def handle_promotion(moved_piece, end_pos)
+    moved_piece.promote if moved_piece.is_a?(Pawn) && [0,7].include?(end_pos[0])
+  end
+
   def handle_en_passant(moved_piece, start, end_pos)
+    ep_pos = board_data[:en_passant_pawn]
+    square_moved_through = nil
+
+    unless ep_pos.empty?
+      fwd_dir = self[ep_pos].forward_dir
+      square_moved_through = [ep_pos[0] - fwd_dir, ep_pos[1]]
+    end
+
+    board_data[:en_passant_pawn] = []
     return false unless moved_piece.is_a?(Pawn)
-    options[:en_passant_pawns]
+    board_data[:en_passant_pawn] = moved_piece.pos if (start[0] - end_pos[0]).abs == 2
+
+    if square_moved_through && end_pos == square_moved_through
+      self[ep_pos] = NullPiece.instance
+    end
+  end
+
+  def handle_castling(moved_piece, start, end_pos)
+    if castle_move?(moved_piece, start, end_pos)
+      move_rook_for_castle!(start, end_pos)
+    end
+
+    remove_castling_privilege(start, moved_piece.color)
   end
 
   def dup_options
     duped = {}
-    options.each { |k, v| duped[k] = v.dup }
+    board_data.each { |k, v| duped[k] = v.dup }
     duped
   end
 
@@ -151,12 +176,12 @@ class Board
     return unless color_matches_rank
     case file
     when 0
-      @options[:castle_queenside].delete(color)
+      @board_data[:castle_queenside].delete(color)
     when 4
-      @options[:castle_queenside].delete(color)
-      @options[:castle_kingside].delete(color)
+      @board_data[:castle_queenside].delete(color)
+      @board_data[:castle_kingside].delete(color)
     when 7
-      @options[:castle_kingside].delete(color)
+      @board_data[:castle_kingside].delete(color)
     end
   end
 
