@@ -45,7 +45,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   player1 = HumanPlayer.new("Sam")
-  player2 = ComputerPlayer.new("Marc")
+  player2 = SlightlySmarterComputerPlayer.new("Marc")
   game = ChessGame.new(player1, player2)
   game.play
 end
