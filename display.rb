@@ -22,7 +22,7 @@ class Display
 
   def render
     system('clear')
-    puts "   0  1  2  3  4  5  6  7"
+    puts "   a  b  c  d  e  f  g  h"
     0.upto(7) do |row|
       str_row = ""
       0.upto(7) do |col|
@@ -32,7 +32,7 @@ class Display
         piece_symbol = board[[row,col]].to_s
         str_row << " #{piece_symbol} ".colorize(:background => color)
       end
-      puts "#{row} #{str_row}"
+      puts "#{8 - row} #{str_row}"
     end
   end
 

@@ -7,8 +7,13 @@ class ChessGame
   def initialize(player1, player2)
     @board = Board.setup
     @display = Display.new(board)
-    @player1 = HumanPlayer.new(player1, display, :white)
-    @player2 = HumanPlayer.new(player2, display, :black)
+    @player1 = player1
+    @player2 = player2
+    player1.display = @display
+    player2.display = @display
+    player1.color = :white
+    player2.color = :black
+
     @players = [@player1, @player2]
   end
 
@@ -29,6 +34,7 @@ class ChessGame
 
       players.rotate!
     end
+    puts "Checkmate!"
   end
 
   private
@@ -38,6 +44,8 @@ class ChessGame
 end
 
 if __FILE__ == $PROGRAM_NAME
-  game = ChessGame.new("Sam", "Marc")
+  player1 = HumanPlayer.new("Sam")
+  player2 = ComputerPlayer.new("Marc")
+  game = ChessGame.new(player1, player2)
   game.play
 end
