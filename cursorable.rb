@@ -41,6 +41,8 @@ module Cursorable
     case key
     when :ctrl_c
       exit 0
+    when :tab
+      board.debug_board
     when :return, :space
       @cursor_pos
     when :left, :right, :up, :down

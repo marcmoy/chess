@@ -5,7 +5,7 @@ require_relative 'players'
 class ChessGame
 
   def initialize(player1, player2)
-    @board = Board.new
+    @board = Board.setup
     @display = Display.new(board)
     @player1 = HumanPlayer.new(player1, display, :white)
     @player2 = HumanPlayer.new(player2, display, :black)
@@ -31,6 +31,7 @@ class ChessGame
   end
 
   private
+
   attr_reader :board, :display
   attr_accessor :players
 end

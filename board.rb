@@ -5,9 +5,26 @@ end
 
 class Board
 
+  def self.setup
+    board = Board.new
+    [:black, :white].each_with_index do |color, i|
+      piece_rank = 7 * i
+      pawn_rank = 5 * i + 1
+      [Rook, Knight, Bishop].each_with_index do |klass, j|
+        klass.new(board, color, [piece_rank, j])
+        klass.new(board, color, [piece_rank, 7 - j])
+      end
+      King.new(board, color, [piece_rank, 4])
+      Queen.new(board, color, [piece_rank, 3])
+      0.upto(7) do |file|
+        Pawn.new(board, color, [pawn_rank, file])
+      end
+    end
+    board
+  end
+
   def initialize
     @grid = Array.new(8){ Array.new(8) { NullPiece.instance } }
-    populate_grid
   end
 
   def [](pos)
@@ -15,7 +32,7 @@ class Board
     grid[x][y]
   end
 
-  def []=(pos,value)
+  def []=(pos, value)
     x, y = pos
     grid[x][y] = value
   end
@@ -57,6 +74,10 @@ class Board
     false
   end
 
+  def debug_board
+    debugger
+  end
+
   def checkmate?(color)
     own_pieces = grid.flatten.select { |piece| piece.color == color }
     in_check?(color) && own_pieces.all? { |piece| piece.valid_moves.empty? }
@@ -77,31 +98,6 @@ class Board
   attr_reader :grid
 
   def find_king(color)
-    grid.flatten.find{|piece| piece.is_a?(King) && piece.color == color}.pos
-  end
-
-  def populate_grid
-    Rook.new(self, :black, [0,0])
-    Knight.new(self, :black, [0,1])
-    Bishop.new(self, :black, [0,2])
-    Queen.new(self, :black, [0,3])
-    King.new(self, :black, [0,4])
-    Bishop.new(self, :black, [0,5])
-    Knight.new(self, :black, [0,6])
-    Rook.new(self, :black, [0,7])
-
-    Rook.new(self, :white, [7,0])
-    Knight.new(self, :white, [7,1])
-    Bishop.new(self, :white, [7,2])
-    Queen.new(self, :white, [7,3])
-    King.new(self, :white, [7,4])
-    Bishop.new(self, :white, [7,5])
-    Knight.new(self, :white, [7,6])
-    Rook.new(self, :white, [7,7])
-
-    0.upto(7) do |col|
-      Pawn.new(self, :black, [1, col])
-      Pawn.new(self, :white, [6, col])
-    end
+    grid.flatten.find{ |piece| piece.is_a?(King) && piece.color == color }.pos
   end
 end
