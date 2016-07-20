@@ -117,7 +117,6 @@ class King < Piece
         end
     end
 
-
   end
 
   def can_castle_queen_side?
