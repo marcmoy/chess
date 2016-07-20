@@ -36,6 +36,10 @@ class Piece
     board[pos] = Queen.new(board, color, pos)
   end
 
+  def ==(other)
+    pos == other.pos && self.class == other.class
+  end
+
   private
 
   def move_into_check?(to_pos)

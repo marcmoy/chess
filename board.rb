@@ -104,6 +104,10 @@ class Board
     dup_board
   end
 
+  def captured_pieces(color)
+    Board.setup.pieces(color) - self.pieces(color)
+  end
+
   private
   attr_reader :grid
 
