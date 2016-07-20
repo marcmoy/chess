@@ -56,6 +56,11 @@ class NullPiece
     " "
   end
 
+  def forward_dir
+    debugger
+    raise NoMethodError
+  end
+
   def moves
     []
   end
