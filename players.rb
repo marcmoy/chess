@@ -121,7 +121,7 @@ class Level4ComputerPlayer < Level3ComputerPlayer
     display.render
     puts "Computer player #{name} is thinking..."
     sleep(1)
-    prevent_capture_move || capture_move || random_move
+    capture_move || prevent_capture_move || random_move
   end
 
   def prevent_capture_move

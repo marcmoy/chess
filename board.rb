@@ -105,7 +105,15 @@ class Board
   end
 
   def captured_pieces(color)
-    Board.setup.pieces(color) - self.pieces(color)
+    captured = default_pieces
+    pieces(color).map(&:symbol).each do |piece|
+      captured.delete_at(captured.index(piece))
+    end
+    captured
+  end
+
+  def default_pieces
+    %w(♜ ♞ ♝ ♚ ♛ ♝ ♞ ♜ ♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟)
   end
 
   private

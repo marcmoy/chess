@@ -83,7 +83,7 @@ class King < Piece
   include Stepable
 
   def symbol
-    "♔"
+    "♚"
   end
 
   def moves
@@ -151,7 +151,7 @@ class Knight < Piece
   include Stepable
 
   def symbol
-   "♘"
+   "♞"
   end
 
   def moves
@@ -169,7 +169,7 @@ class Bishop < Piece
   include Slidable
 
   def symbol
-    "♗"
+    "♝"
   end
 
   protected
@@ -181,13 +181,8 @@ end
 class Rook < Piece
   include Slidable
 
-  # def initialize
-  #   @moved_already = false
-  #   super
-  # end
-
   def symbol
-    "♖"
+    "♜"
   end
 
   protected
@@ -200,7 +195,7 @@ class Queen < Piece
   include Slidable
 
   def symbol
-    "♕"
+    "♛"
   end
 
   protected
@@ -217,7 +212,7 @@ class Pawn < Piece
   end
 
   def symbol
-    "♙"
+    "♟"
   end
 
   def moves
