@@ -2,7 +2,7 @@
  
 Created a ruby implementation for the game of chess.
 
-`ruby lib/game.rb`
+`ruby game.rb`
 
 Things to do:
 
