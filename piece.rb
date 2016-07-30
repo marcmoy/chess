@@ -17,7 +17,7 @@ class Piece
   end
 
   def to_s
-    symbol.colorize(:color => color)
+    symbol
   end
 
   def empty?
@@ -61,7 +61,6 @@ class NullPiece
   end
 
   def forward_dir
-    debugger
     raise NoMethodError
   end
 
@@ -77,17 +76,25 @@ class NullPiece
     true
   end
 
+  def value
+    0
+  end
+
 end
 
 class King < Piece
   include Stepable
 
   def symbol
-    "♚"
+    color == :black ? "♚" : "♔"
   end
 
   def moves
     step_moves + castle_moves
+  end
+
+  def value
+    200
   end
 
   def castle_moves
@@ -137,13 +144,13 @@ class King < Piece
   end
 
   protected
+
   def move_diffs
-    [[-1, -1], [-1, 0], [-1, 1],
-     [0, -1],           [0, 1],
-     [1, -1],  [1, 0],  [1, 1]]
+  [
+    [-1, -1], [-1, 0], [-1, 1], [0, -1],
+    [0, 1], [1, -1], [1, 0], [1, 1]
+   ]
   end
-
-
 
 end
 
@@ -151,11 +158,15 @@ class Knight < Piece
   include Stepable
 
   def symbol
-   "♞"
+   color == :black ? "♞" : "♘"
   end
 
   def moves
     step_moves
+  end
+
+  def value
+    3
   end
 
   protected
@@ -169,7 +180,11 @@ class Bishop < Piece
   include Slidable
 
   def symbol
-    "♝"
+    color == :black ? "♝" : "♗"
+  end
+
+  def value
+    3
   end
 
   protected
@@ -182,7 +197,11 @@ class Rook < Piece
   include Slidable
 
   def symbol
-    "♜"
+    color == :black ? "♜" : "♖"
+  end
+
+  def value
+    5
   end
 
   protected
@@ -195,7 +214,11 @@ class Queen < Piece
   include Slidable
 
   def symbol
-    "♛"
+    color == :black ? "♛" : "♕"
+  end
+
+  def value
+    9
   end
 
   protected
@@ -207,12 +230,12 @@ end
 
 class Pawn < Piece
 
-  def debug_pawn
-    debugger
+  def symbol
+    color == :black ? "♟" : "♙"
   end
 
-  def symbol
-    "♟"
+  def value
+    1
   end
 
   def moves

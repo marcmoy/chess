@@ -42,7 +42,7 @@ class Level1ComputerPlayer
 
   def play_turn
     display.render
-    puts "Computer player #{name} is thinking..."
+    puts "Computer player is thinking..."
     sleep(1)
     random_move
   end
@@ -68,7 +68,7 @@ class Level2ComputerPlayer < Level1ComputerPlayer
 
   def play_turn
     display.render
-    puts "Computer player #{name} is thinking..."
+    puts "Computer player is thinking..."
     sleep(1)
     capture_move || random_move
   end
@@ -119,9 +119,9 @@ class Level4ComputerPlayer < Level3ComputerPlayer
 
   def play_turn
     display.render
-    puts "Computer player #{name} is thinking..."
+    print "Computer player is thinking..."
     sleep(1)
-    capture_move || prevent_capture_move || random_move
+    prevent_capture_move || capture_move || random_move
   end
 
   def prevent_capture_move

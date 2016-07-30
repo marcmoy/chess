@@ -1,6 +1,7 @@
 require_relative 'board'
 require_relative 'display'
 require_relative 'players'
+require_relative 'computer'
 
 class ChessGame
 
@@ -37,15 +38,31 @@ class ChessGame
     puts "Checkmate!"
   end
 
-  private
-
   attr_reader :board, :display
   attr_accessor :players
 end
 
 if __FILE__ == $PROGRAM_NAME
   player1 = HumanPlayer.new("Sam")
-  player2 = Level4ComputerPlayer.new("Marc")
+  player2 = ComputerAI.new("Marc")
   game = ChessGame.new(player1, player2)
   game.play
 end
+
+# SET UP FOR PRY TESTING
+
+# def reload!
+#    load 'board.rb'
+#    load 'computer.rb'
+#    load 'display.rb'
+#    load 'board_tree_node'
+# end
+# reload!
+# def render(board)
+#   d = Display.new(board)
+#   d.render
+# end
+# b = Board.setup
+# qb.move!([7,1],[5,2])
+# qrender(b)
+# node = BoardTreeNode.new(b, :black)

@@ -22,7 +22,7 @@ class Display
 
   def render
     system('clear')
-    puts board.captured_pieces(:white).join(" ").colorize(:color => :light_white)
+    puts board.captured_pieces(:white).join(" ")
     puts "   a  b  c  d  e  f  g  h"
     0.upto(7) do |row|
       str_row = ""
@@ -35,7 +35,7 @@ class Display
       end
       puts "#{8 - row} #{str_row} "
     end
-    puts board.captured_pieces(:black).join(" ").colorize(:color => :♖black)
+    puts board.captured_pieces(:black).join(" ")
 
   end
 
