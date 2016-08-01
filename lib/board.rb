@@ -1,4 +1,5 @@
 require_relative 'piece'
+require_relative 'display'
 
 class InvalidMoveError < StandardError
 end
@@ -120,6 +121,11 @@ class Board
 
   def value(color)
     pieces(color).map(&:value).reduce(:+)
+  end
+
+  def render
+    d = Display.new(self)
+    d.render
   end
 
   private

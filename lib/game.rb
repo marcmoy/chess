@@ -35,6 +35,7 @@ class ChessGame
 
       players.rotate!
     end
+    board.render
     puts "Checkmate!"
   end
 
@@ -44,7 +45,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   player1 = HumanPlayer.new("Sam")
-  player2 = Level2ComputerPlayer.new("Marc")
+  player2 = ComputerAI.new("Marc")
   game = ChessGame.new(player1, player2)
   game.play
 end
