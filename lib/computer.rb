@@ -17,7 +17,6 @@ class ComputerAI
   def play_turn
     display.render
     puts "Computer #{name} is thinking..."
-    sleep(1)
     best_move
   end
 
