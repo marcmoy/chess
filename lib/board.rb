@@ -87,7 +87,7 @@ class Board
   end
 
   def checkmate?(color)
-    in_check?(color) && pieces(color).all? { |piece| piece.valid_moves.empty? }
+    pieces(color).all? { |piece| piece.valid_moves.empty? }
   end
 
   def pieces(color)
