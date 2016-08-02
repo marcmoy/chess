@@ -13,3 +13,7 @@ Currently, working on building a computer AI.
 - AI plays defense well, but cannot make smart offensive moves
 - Completed one full game against AI to checkmate with no failures
 - Need to build strategy for the beginning of the game
+
+###Game notes
+- need to fix pawn promote bug
+- create Gemfile
